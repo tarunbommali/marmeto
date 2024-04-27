@@ -12,13 +12,19 @@
   <body>
     <div class="product-container">
       <div class="product-images">
-        <img id="preview-image" src="" alt="Preview Image">
+        <picture>
+          <!-- Source for browsers that support the "srcset" attribute -->
+          <source srcset="image-large.jpg" media="(min-width: 600px)">
+          <!-- Fallback source for browsers that do not support the "srcset" attribute -->
+          <img id="preview-image" src="" height="500px" width="400px" alt="Preview Image">
+        </picture>
+        
         <div class="product-thumbnail-images" id="thumbnail-images">
           <!-- Thumbnails will be added dynamically -->
         </div>
       </div>
       <div class="product-details">
-        <p id="company-name">Mermeto</p>
+        <p id="company-name">Marmeto</p>
         <h2 id="product-title"></h2>
         <div class="price-details">
         <div class="product-price-discount">
@@ -29,6 +35,14 @@
       </div>
         <div id="product-options">
           <!-- Color and size options will be added dynamically -->
+          <div class="colors-list-container">
+            <h1>Choose a Color</h1>
+            <div id="colorsList"></div>
+          </div>
+          <div class="sizes-list-container">
+            <h1>Choose a Size </h1>
+            <div id="sizesList"></div>
+          </div>
         </div>
        <div class="quantity-cart-container"> 
         <div class="quantity-container">

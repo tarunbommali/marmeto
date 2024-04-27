@@ -11,19 +11,23 @@ fetch(apiUrl)
     const productPrice = product?.price;
     const productComparePrice = product?.compare_at_price;
 
-    const priceValue = parseFloat(product.price.replace("$", ""));
+    let selectedColor = null;
+    let selectedSize = null;
+
+    const priceValue = parseFloat(productPrice.replace("$", ""));
     const compareAtPriceValue = parseFloat(
-      product.compare_at_price.replace("$", "")
+      productComparePrice.replace("$", "")
     );
+    const discountPercent =
+      ((compareAtPriceValue - priceValue) / compareAtPriceValue) * 100;
 
     // Display product title, description, and price
     document.getElementById("product-title").innerText = productTitle;
-    document.getElementById("product-description").innerHTML =productDescription;
+    document.getElementById("product-description").innerHTML =
+      productDescription;
     document.getElementById("product-price").innerText = productPrice;
-    document.getElementById("product-compare-price").innerText = productComparePrice;
-    
-
-
+    document.getElementById("product-compare-price").innerText =
+      productComparePrice;
 
     // Display product images and thumbnails
     const imagesContainer = document.getElementById("thumbnail-images");
@@ -50,26 +54,14 @@ fetch(apiUrl)
       }
     });
 
-    
-    // Calculate and display discount percentage
-    const discountPercent = ((compareAtPriceValue - priceValue) / compareAtPriceValue) * 100;
+    // Display discount percentage
     const discountPercentElement = document.getElementById("discount-percent");
     if (discountPercentElement) {
       discountPercentElement.innerText = `(${discountPercent.toFixed(2)}% off)`;
     }
 
     // Display color options
-    const optionsContainer = document.getElementById("product-options");
-    const colorOptionContainer = document.createElement("div");
-    colorOptionContainer.className = "option-container";
-
-    const colorOptionTitle = document.createElement("h3");
-    colorOptionTitle.className = "option-title";
-    colorOptionTitle.textContent = "Choose a Color";
-    colorOptionContainer.appendChild(colorOptionTitle);
-
-    const colorOptionItemsContainer = document.createElement("div");
-    colorOptionItemsContainer.className = "option-item-container";
+    const colorsListContainer = document.getElementById("colorsList");
     product.options.forEach((option) => {
       if (option.name.toLowerCase() === "color") {
         option.values.forEach((value) => {
@@ -81,31 +73,20 @@ fetch(apiUrl)
           colorDiv.title = colorName;
           colorDiv.addEventListener("click", function () {
             alert(`Selected Color: ${colorName}`);
-            // Additional logic based on the selected color can be added here
+            selectedColor = colorName;
           });
-          colorOptionItemsContainer.appendChild(colorDiv);
+          colorsListContainer.appendChild(colorDiv);
         });
       }
     });
-    colorOptionContainer.appendChild(colorOptionItemsContainer);
-    optionsContainer.appendChild(colorOptionContainer);
 
     // Display size options
-    const sizeOptionContainer = document.createElement("div");
-    sizeOptionContainer.className = "option-container";
-
-    const sizeOptionTitle = document.createElement("h3");
-    sizeOptionTitle.className = "option-title";
-    sizeOptionTitle.textContent = "Choose a Size";
-    sizeOptionContainer.appendChild(sizeOptionTitle);
-
-    const sizeOptionItemsContainer = document.createElement("div");
-    sizeOptionItemsContainer.className = "size-option-item-container";
+    const sizesListContainer = document.getElementById("sizesList");
     product.options.forEach((option) => {
       if (option.name.toLowerCase() === "size") {
         option.values.forEach((value) => {
           const sizeInputContainer = document.createElement("div"); // Container for each size option
-          sizeInputContainer.className = "size-option-container";
+          sizeInputContainer.classList.add("size-option-container");
 
           const sizeInput = document.createElement("input");
           sizeInput.type = "radio";
@@ -114,6 +95,7 @@ fetch(apiUrl)
           sizeInput.className = "size-option-input";
           sizeInput.addEventListener("click", function () {
             alert(`Selected Size: ${value}`);
+            selectedSize = value; // Corrected variable name
           });
 
           const sizeLabel = document.createElement("label");
@@ -127,16 +109,10 @@ fetch(apiUrl)
           sizeInputContainer.appendChild(sizeInput);
           sizeInputContainer.appendChild(sizeLabel);
 
-          sizeOptionItemsContainer.appendChild(sizeInputContainer);
+          sizesListContainer.appendChild(sizeInputContainer);
         });
       }
     });
-
-    sizeOptionItemsContainer.className = "size-option";
-
-    sizeOptionContainer.appendChild(sizeOptionItemsContainer);
-
-    optionsContainer.appendChild(sizeOptionContainer);
 
     // Quantity Controller
     document.getElementById("increment").addEventListener("click", function () {
@@ -156,19 +132,14 @@ fetch(apiUrl)
       .getElementById("add-to-cart")
       .addEventListener("click", function (event) {
         event.preventDefault();
-        const selectedColor = document.querySelector(
-          'input[name="color"]:checked'
-        );
-        const selectedSize = document.querySelector(
-          'input[name="size"]:checked'
-        );
-        if (!selectedColor || !selectedSize) {
-          alert("Please choose color and size.");
-        } else {
+        
+        // Check if both color and size are selected
+        if (selectedColor !== null && selectedSize !== null) {
           alert(
-            `Product added to cart!\nColor: ${selectedColor.value}\nSize: ${selectedSize.value}\nDescription: ${product.description}`
+            `Product added to cart!\nColor: ${selectedColor}\nSize: ${selectedSize}\nDescription: ${productDescription}`
           );
-          // Additional logic to add the product to the cart can be added here
+        } else {
+          alert("Please choose color and size.");
         }
       });
   })

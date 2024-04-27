@@ -1,12 +1,8 @@
 /* Importing font */
 @import url("https://fonts.googleapis.com/css?family=Roboto:300");
 
-/* Resetting default styles */
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
+* {
+  margin: 8px 5px;
 }
 
 /* Body layout */
@@ -14,6 +10,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px ;
 }
 
 /* Hyperlink styles */
@@ -44,10 +41,20 @@ a:active {
 /* Product container */
 .product-container {
   padding: 5px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   margin: 20px;
 }
+
+
+@media only screen and (max-width: 600px) {
+  .product-container  {
+    font-size: 14px;
+    flex-direction:column;
+    padding: 3px 5px; 
+    margin: 5px;
+  }
+}
+
 
 /* Company name styling */
 #company-name {
@@ -76,8 +83,8 @@ a:active {
 }
 
 /* Product images */
-#preview-image{
-  width: 100%; 
+#preview-image {
+  width: 100%;
   height: 400px;
 }
 .product-images {
@@ -106,6 +113,7 @@ a:active {
 /* Product description */
 #product-description {
   color: #a3a3a3;
+  padding-top: 5px;
 }
 
 /* Product details container */
@@ -159,10 +167,9 @@ a:active {
   margin: 3px 5px;
   border-radius: 25px;
   height: 40px;
-
 }
 
-.fa-cart-shopping{
+.fa-cart-shopping {
   margin: 0px 10px;
 }
 #add-to-cart:hover {
@@ -170,8 +177,19 @@ a:active {
 }
 
 /* Size option container */
+
+#sizesList {
+  display: flex;
+}
+
 .size-option-item-container {
   display: flex;
+}
+
+.size-option-container{
+  background: #f3f3f3 ;
+  border-radius: 10px;
+  padding: 3px 5px;
 }
 
 .option-item-container {
@@ -196,12 +214,10 @@ a:active {
   margin: 5px;
   cursor: pointer;
   border-radius: 2px;
-
 }
-.color-option:hover{
-  transform: scale(1.03); 
+.color-option:hover {
+  transform: scale(1.03);
   transition: width 0.3s ease-in-out;
-
 }
 
 .color-option-container {
@@ -212,4 +228,13 @@ a:active {
 .size-container {
   display: flex;
   margin: 5px 0px;
+}
+
+
+#colorsList{
+  display:flex;
+}
+
+.quantity-cart-container, .colors-list-container{
+  border-bottom: 1px solid #e4e4e4;
 }
