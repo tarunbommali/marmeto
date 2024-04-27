@@ -1,98 +1,175 @@
-const apiUrl = "https://cdn.shopify.com/s/files/1/0564/3685/0790/files/singleProduct.json?v=1701948448";
+const apiUrl =
+  "https://cdn.shopify.com/s/files/1/0564/3685/0790/files/singleProduct.json?v=1701948448";
 
 fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    const product = data.product;
+  .then((response) => response.json())
+  .then((data) => {
+    const product = data?.product;
+
+    const productTitle = product?.title;
+    const productDescription = product?.description;
+    const productPrice = product?.price;
+    const productComparePrice = product?.compare_at_price;
+
+    const priceValue = parseFloat(product.price.replace("$", ""));
+    const compareAtPriceValue = parseFloat(
+      product.compare_at_price.replace("$", "")
+    );
+
+    // Display product title, description, and price
+    document.getElementById("product-title").innerText = productTitle;
+    document.getElementById("product-description").innerHTML =productDescription;
+    document.getElementById("product-price").innerText = productPrice;
+    document.getElementById("product-compare-price").innerText = productComparePrice;
     
-    document.getElementById('product-title').innerText = product.title;
-    document.getElementById('product-description').innerHTML = product.description;
-    document.getElementById('product-price').innerText = product.price;
-    const discount = product.compare_at_price -  product.price / product.compare_at_price * 100 
-    document.getElementById('discount-percent').innerText = discount; 
-    document.getElementById('product-compare-price').innerText = `Compare at Price: ${product.compare_at_price}`;
-    
-    const imagesContainer = document.querySelector('.product-images');
-    product.images.forEach(image => {
-      const img = document.createElement('img');
-      img.src = image.src;
-      imagesContainer.appendChild(img);
+
+
+
+    // Display product images and thumbnails
+    const imagesContainer = document.getElementById("thumbnail-images");
+    const previewImage = document.getElementById("preview-image");
+
+    product.images.forEach((image, index) => {
+      // Create thumbnail image
+      const thumbnailImg = document.createElement("img");
+      thumbnailImg.src = image?.src;
+      thumbnailImg.alt = "Thumbnail Image";
+      thumbnailImg.className = "thumbnail-image";
+
+      // Add click event listener to change preview image
+      thumbnailImg.addEventListener("click", function () {
+        previewImage.src = image.src;
+      });
+
+      // Append thumbnail image to thumbnails container
+      imagesContainer.appendChild(thumbnailImg);
+
+      // Set the first image as the initial preview image
+      if (index === 0) {
+        previewImage.src = image?.src;
+      }
     });
 
-    const optionsContainer = document.getElementById('product-options');
     
-    // Create container for color options
-    const colorOptionContainer = document.createElement('div');
-    colorOptionContainer.className = 'color-option-container';
-    
-    // Create container for size options
-    const sizeOptionContainer = document.createElement('div');
-    sizeOptionContainer.className = 'size-option-container';
+    // Calculate and display discount percentage
+    const discountPercent = ((compareAtPriceValue - priceValue) / compareAtPriceValue) * 100;
+    const discountPercentElement = document.getElementById("discount-percent");
+    if (discountPercentElement) {
+      discountPercentElement.innerText = `(${discountPercent.toFixed(2)}% off)`;
+    }
 
-    product.options.forEach(option => {
-      const optionContainer = document.createElement('div');
-      optionContainer.className = 'option-container';
-      
-      const optionTitle = document.createElement('h1');
-      optionTitle.textContent = option.name; // Display option name (e.g., Color or Size)
-      optionContainer.appendChild(optionTitle);
+    // Display color options
+    const optionsContainer = document.getElementById("product-options");
+    const colorOptionContainer = document.createElement("div");
+    colorOptionContainer.className = "option-container";
 
-      const optionItemContainer = document.createElement('div');
-      optionItemContainer.className = 'option-item-container';
+    const colorOptionTitle = document.createElement("h3");
+    colorOptionTitle.className = "option-title";
+    colorOptionTitle.textContent = "Choose a Color";
+    colorOptionContainer.appendChild(colorOptionTitle);
 
-      option.values.forEach(value => {
-        if (option.name.toLowerCase() === 'color') {
-          const colorDiv = document.createElement('div');
+    const colorOptionItemsContainer = document.createElement("div");
+    colorOptionItemsContainer.className = "option-item-container";
+    product.options.forEach((option) => {
+      if (option.name.toLowerCase() === "color") {
+        option.values.forEach((value) => {
           const colorName = Object.keys(value)[0];
           const hexCode = value[colorName];
-          
-          colorDiv.className = 'color-option';
+          const colorDiv = document.createElement("div");
+          colorDiv.className = "color-option";
           colorDiv.style.backgroundColor = hexCode;
-          colorDiv.title = colorName; // Set the color name as tooltip
-          colorDiv.addEventListener('click', function() {
+          colorDiv.title = colorName;
+          colorDiv.addEventListener("click", function () {
             alert(`Selected Color: ${colorName}`);
             // Additional logic based on the selected color can be added here
           });
-          optionItemContainer.appendChild(colorDiv);
-        } else if (option.name.toLowerCase() === 'size') {
-          const sizeInput = document.createElement('input');
-          sizeInput.type = 'radio';
-          sizeInput.name = 'size';
-          sizeInput.value = value;
-          sizeInput.className = 'size-option'; // Add classname for size option
-          sizeInput.addEventListener('click', function() {
-            alert(`Selected Size: ${value}`);
-            // Additional logic based on the selected size can be added here
-          });
-          const sizeLabel = document.createElement('label');
-          sizeLabel.textContent = value;
-          optionItemContainer.appendChild(sizeInput);
-          optionItemContainer.appendChild(sizeLabel);
-        }
-      });
+          colorOptionItemsContainer.appendChild(colorDiv);
+        });
+      }
+    });
+    colorOptionContainer.appendChild(colorOptionItemsContainer);
+    optionsContainer.appendChild(colorOptionContainer);
 
-      if (option.name.toLowerCase() === 'color') {
-        colorOptionContainer.appendChild(optionContainer);
-        colorOptionContainer.appendChild(optionItemContainer);
-      } else if (option.name.toLowerCase() === 'size') {
-        sizeOptionContainer.appendChild(optionContainer);
-        sizeOptionContainer.appendChild(optionItemContainer);
+    // Display size options
+    const sizeOptionContainer = document.createElement("div");
+    sizeOptionContainer.className = "option-container";
+
+    const sizeOptionTitle = document.createElement("h3");
+    sizeOptionTitle.className = "option-title";
+    sizeOptionTitle.textContent = "Choose a Size";
+    sizeOptionContainer.appendChild(sizeOptionTitle);
+
+    const sizeOptionItemsContainer = document.createElement("div");
+    sizeOptionItemsContainer.className = "size-option-item-container";
+    product.options.forEach((option) => {
+      if (option.name.toLowerCase() === "size") {
+        option.values.forEach((value) => {
+          const sizeInputContainer = document.createElement("div"); // Container for each size option
+          sizeInputContainer.className = "size-option-container";
+
+          const sizeInput = document.createElement("input");
+          sizeInput.type = "radio";
+          sizeInput.name = "size";
+          sizeInput.value = value;
+          sizeInput.className = "size-option-input";
+          sizeInput.addEventListener("click", function () {
+            alert(`Selected Size: ${value}`);
+          });
+
+          const sizeLabel = document.createElement("label");
+          sizeLabel.textContent = value;
+          sizeLabel.className = "size-option-label";
+          sizeLabel.setAttribute("for", value);
+          sizeLabel.addEventListener("click", function () {
+            sizeInput.click();
+          });
+
+          sizeInputContainer.appendChild(sizeInput);
+          sizeInputContainer.appendChild(sizeLabel);
+
+          sizeOptionItemsContainer.appendChild(sizeInputContainer);
+        });
       }
     });
 
-    optionsContainer.appendChild(colorOptionContainer);
+    sizeOptionItemsContainer.className = "size-option";
+
+    sizeOptionContainer.appendChild(sizeOptionItemsContainer);
+
     optionsContainer.appendChild(sizeOptionContainer);
 
-    document.getElementById('add-to-cart').addEventListener('click', function(event) {
-      event.preventDefault();
-      const selectedColor = document.querySelector('input[name="color"]:checked');
-      const selectedSize = document.querySelector('input[name="size"]:checked');
-      if (!selectedColor || !selectedSize) {
-        alert('Please choose color and size.');
-      } else {
-        alert(`Product added to cart!\nColor: ${selectedColor.value}\nSize: ${selectedSize.value}\nDescription: ${product.description}`);
-        // Additional logic to add the product to the cart can be added here
+    // Quantity Controller
+    document.getElementById("increment").addEventListener("click", function () {
+      const quantityInput = document.getElementById("quantity");
+      quantityInput.value = parseInt(quantityInput.value) + 1;
+    });
+
+    document.getElementById("decrement").addEventListener("click", function () {
+      const quantityInput = document.getElementById("quantity");
+      if (parseInt(quantityInput.value) > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
       }
     });
+
+    // Event listener for adding product to cart
+    document
+      .getElementById("add-to-cart")
+      .addEventListener("click", function (event) {
+        event.preventDefault();
+        const selectedColor = document.querySelector(
+          'input[name="color"]:checked'
+        );
+        const selectedSize = document.querySelector(
+          'input[name="size"]:checked'
+        );
+        if (!selectedColor || !selectedSize) {
+          alert("Please choose color and size.");
+        } else {
+          alert(
+            `Product added to cart!\nColor: ${selectedColor.value}\nSize: ${selectedSize.value}\nDescription: ${product.description}`
+          );
+          // Additional logic to add the product to the cart can be added here
+        }
+      });
   })
-  .catch(error => console.error('Error fetching product data:', error));
+  .catch((error) => console.error("Error fetching product data:", error));

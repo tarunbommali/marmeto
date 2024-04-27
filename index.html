@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <!-- REPLACE THIS WITH YOUR PROJECT NAME. EXAMPLE - Category tabs -->
-    <title>Coding Assesment L2 Mermeto</title>
+    <title>Product Details</title>
+    <script src="https://kit.fontawesome.com/efc0272688.js" crossorigin="anonymous"></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="product-container">
-        <div class="product-images"></div>
-        <div class="product-details">
-          <p id="company-name">Mermeto</p>
-          <h2 id="product-title"></h2>
-          <h1 id="product-price"><span id="discount-percent"></span></h1>
-          <p id="product-compare-price"></p>
-          <div id="product-options"></div>
-          <button id="add-to-cart">Add to Cart</button>
-          <p id="product-description"></p>
-         
+      <div class="product-images">
+        <img id="preview-image" src="" alt="Preview Image">
+        <div class="product-thumbnail-images" id="thumbnail-images">
+          <!-- Thumbnails will be added dynamically -->
         </div>
       </div>
+      <div class="product-details">
+        <p id="company-name">Mermeto</p>
+        <h2 id="product-title"></h2>
+        <div class="price-details">
+        <div class="product-price-discount">
+          <h1 id="product-price"></h1>
+          <p id="discount-percent"></p>
+        </div>
+        <h4 id="product-compare-price"></h4>
+      </div>
+        <div id="product-options">
+          <!-- Color and size options will be added dynamically -->
+        </div>
+       <div class="quantity-cart-container"> 
+        <div class="quantity-container">
+          <button class="quantity-button" id="decrement">-</button>
+          <input type="number" class="quantity-input" id="quantity" value="1" min="1">
+          <button class="quantity-button" id="increment">+</button>
+      </div>
+        <button id="add-to-cart"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
+        </div>
+        <p id="product-description"></p>
+      </div>
+    </div>
     <script src="./script.js"></script>
-</body>
-
+  </body>
 </html>

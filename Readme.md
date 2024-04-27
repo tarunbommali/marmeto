@@ -25,13 +25,10 @@ project-root/
 
 To get started with the project:
 
-1. Clone the repository using Git:
+1. Clone the repository using Git  git clone https://github.com/tarunbommali/marmeto.git
+   Alternatively, download the code as a ZIP file and extract it.
 
-git clone https://github.com/your-username/your-repository.git
-
-Alternatively, download the code as a ZIP file and extract it.
-
-2. Navigate to the project directory:
+2. Navigate to the project directory
 
 3. Open `index.html` in a web browser to view the initial state of the project.
 
@@ -43,7 +40,7 @@ Alternatively, download the code as a ZIP file and extract it.
 
 ## Deployment
 
-You can view the deployed version of this project by clicking [here](put-your-deployment-link-here).
+You can view the deployed version of this project by clicking [here](https://l2marmeto.netlify.app/).
 
 ## Important Notes
 
